@@ -9,7 +9,7 @@ from datetime import datetime
 import pywapi
 import string
 
-from daemon import Daemon
+import daemon
 
 # Weather Icons used with the following permissions:
 #
