@@ -9,7 +9,7 @@ from datetime import datetime
 import pywapi
 import string
 
-import daemon
+from daemon import Daemon
 
 # Weather Icons used with the following permissions:
 #
@@ -21,7 +21,7 @@ import daemon
 # *** Not to be used for commercial use without permission! 
 # if you want to buy the icons for commercial use please send me a note - http://vclouds.deviantart.com/ ***
 
-installPath = "/opt/PiTFTWeather/"
+installPath = "/home/chip/PiTFTWeather/"
 
 # location for Raleigh, NC on weather.com
 weatherDotComLocationCode = '27603:4:US'
@@ -46,12 +46,13 @@ class pitft :
         disp_no = os.getenv("DISPLAY")
         if disp_no:
             print "I'm running under X display = {0}".format(disp_no)
-
-        os.putenv('SDL_FBDEV', '/dev/fb0')
+            driver = 'x11'
+        else:
+            os.putenv('SDL_FBDEV', '/dev/fb0')
+            driver = 'fbcon'
         
         # Select frame buffer driver
         # Make sure that SDL_VIDEODRIVER is set
-        driver = 'fbcon'
         if not os.getenv('SDL_VIDEODRIVER'):
             os.putenv('SDL_VIDEODRIVER', driver)
         try:
@@ -61,7 +62,8 @@ class pitft :
             exit(0)
         
         size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-        self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+#       self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((800,600))
         # Clear the screen to start
         self.screen.fill((0, 0, 0))        
         # Initialise font support
