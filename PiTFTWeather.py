@@ -21,7 +21,8 @@ import string
 # *** Not to be used for commercial use without permission!
 # if you want to buy the icons for commercial use please send me a note - http://vclouds.deviantart.com/ ***
 
-installPath = "/opt/PiTFTWeather/"
+#installPath = "/opt/CHIPWeatherDisplay/"
+installPath = "./"
 
 # location for Raleigh, NC on weather.com
 weatherDotComLocationCode = '27603:4:US'
@@ -49,13 +50,13 @@ class pitft :
             driver = 'x11'
         else:
             os.putenv('SDL_FBDEV', '/dev/fb0')
+            # Select frame buffer driver
             driver = 'fbcon'
 
-        # Select frame buffer driver
         # Make sure that SDL_VIDEODRIVER is set
-        driver = 'fbcon'
         if not os.getenv('SDL_VIDEODRIVER'):
             os.putenv('SDL_VIDEODRIVER', driver)
+
         try:
             pygame.display.init()
         except pygame.error:
