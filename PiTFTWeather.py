@@ -34,7 +34,7 @@ colourWhite = (255, 255, 255)
 colourBlack = (0, 0, 0)
 
 # update interval
-updateRate = 600 # seconds
+updateRate = 60 # seconds
 
 class pitft :
     screen = None;
@@ -103,7 +103,10 @@ class MyDisplay:
                     + weather_com_result['forecasts'][0]['date'][4:] + " " \
                     + weather_com_result['forecasts'][0]['date'][:3]
             except ValueError:
-                break
+                print "ValueError exception"
+                print weather_com_result
+                sleep(updateRate/4)
+                continue
 
             windSpeed = weather_com_result['current_conditions']['wind']['speed']
             if windSpeed == "calm":
