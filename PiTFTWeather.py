@@ -102,8 +102,8 @@ class MyDisplay:
                 today = weather_com_result['forecasts'][0]['day_of_week'][0:3] + " " \
                     + weather_com_result['forecasts'][0]['date'][4:] + " " \
                     + weather_com_result['forecasts'][0]['date'][:3]
-            except ValueError:
-                print "ValueError exception"
+            except:
+                print "Unexpected error:", sys.exc_info()[0]
                 print weather_com_result
                 sleep(updateRate/4)
                 continue
