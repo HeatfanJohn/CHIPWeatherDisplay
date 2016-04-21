@@ -64,7 +64,7 @@ class pitft :
             exit(0)
 
         if disp_no:
-            self.screen = pygame.display.set_mode((800,600))
+            self.screen = pygame.display.set_mode((640,480))
         else:
             size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
             self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
