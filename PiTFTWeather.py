@@ -8,6 +8,8 @@ from time import sleep, strftime
 from datetime import datetime
 import pywapi
 import string
+import random
+import glob
 
 #from daemon import Daemon
 
@@ -23,6 +25,7 @@ import string
 
 #installPath = "/opt/CHIPWeatherDisplay/"
 installPath = "./"
+picturePath = "/home/chip/flickr/photoframe/"
 
 # location for Raleigh, NC on weather.com
 weatherDotComLocationCode = '33330:4:US'
@@ -39,6 +42,7 @@ updateRate = 60 # seconds
 class pitft :
     screen = None;
     colourBlack = (0, 0, 0)
+    size = (640,480)
 
     def __init__(self):
         "Ininitializes a new pygame screen using the framebuffer"
@@ -64,7 +68,7 @@ class pitft :
             exit(0)
 
         if disp_no:
-            self.screen = pygame.display.set_mode((640,480))
+            self.screen = pygame.display.set_mode(size)
         else:
             size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
             self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
@@ -92,8 +96,62 @@ fontSm = pygame.font.Font(fontpath, 30)
 fontTime = pygame.font.Font(fontpath, 40)
 
 class MyDisplay:
+    """
+    aspect_scale.py - Scaling surfaces keeping their aspect ratio
+    Raiser, Frank - Sep 6, 2k++
+    crashchaos at gmx.net
+    
+    This is a pretty simple and basic function that is a kind of
+    enhancement to pygame.transform.scale. It scales a surface
+    (using pygame.transform.scale) but keeps the surface's aspect
+    ratio intact. So you will not get distorted images after scaling.
+    A pretty basic functionality indeed but also a pretty useful one.
+    
+    Usage:
+    is straightforward.. just create your surface and pass it as
+    first parameter. Then pass the width and height of the box to
+    which size your surface shall be scaled as a tuple in the second
+    parameter. The aspect_scale method will then return you the scaled
+    surface (which does not neccessarily have the size of the specified
+    box of course)
+    
+    Dependency:
+    a pygame version supporting pygame.transform (pygame-1.1+)
+    """
+    
+    def aspect_scale(self,img,(bx,by)):
+        """ Scales 'img' to fit into box bx/by.
+         This method will retain the original image's aspect ratio """
+        ix,iy = img.get_size()
+        if ix > iy:
+            # fit to width
+            scale_factor = bx/float(ix)
+            sy = scale_factor * iy
+            if sy > by:
+                scale_factor = by/float(iy)
+                sx = scale_factor * ix
+                sy = by
+            else:
+                sx = bx
+        else:
+            # fit to height
+            scale_factor = by/float(iy)
+            sx = scale_factor * ix
+            if sx > bx:
+                scale_factor = bx/float(ix)
+                sx = bx
+                sy = scale_factor * iy
+            else:
+                sy = by
+    
+        return pygame.transform.scale(img, (int(sx),int(sy)))
+
     # implement run method
     def run(self):
+        images = []
+        for filename in glob.glob(picturePath + '*.jpg'):
+            images.append(filename)
+
         while True:
             weather_com_result = pywapi.get_weather_from_weather_com(weatherDotComLocationCode,units = 'imperial')
 
@@ -208,7 +266,14 @@ class MyDisplay:
             # refresh the screen with all the changes
             pygame.display.update()
 
-            sleep(updateRate)
+            sleep(updateRate/2)
+
+            mytft.screen.fill(colourBlack)
+            img=pygame.image.load(random.choice(images))
+            img=self.aspect_scale(img,pitft.size) 
+            mytft.screen.blit(img,(0,0))
+            pygame.display.flip() # update the display
+            sleep(updateRate/2)
 
 if __name__ == "__main__":
     myDisplay = MyDisplay()
