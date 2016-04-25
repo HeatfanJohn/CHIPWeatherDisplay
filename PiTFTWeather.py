@@ -68,10 +68,10 @@ class pitft :
             exit(0)
 
         if disp_no:
-            self.screen = pygame.display.set_mode(size)
+            self.screen = pygame.display.set_mode(self.size)
         else:
-            size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-            self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
+            self.size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+            self.screen = pygame.display.set_mode(self.size, pygame.FULLSCREEN)
         # Clear the screen to start
         self.screen.fill((0, 0, 0))
         # Initialise font support
