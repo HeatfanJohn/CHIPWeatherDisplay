@@ -268,10 +268,17 @@ class MyDisplay:
 
             sleep(updateRate/2)
 
+            # blank out display
             mytft.screen.fill(colourBlack)
-            img=pygame.image.load(random.choice(images))
-            img=self.aspect_scale(img,pitft.size) 
-            mytft.screen.blit(img,(0,0))
+            img=pygame.image.load(random.choice(images))  # get a random image
+            img=self.aspect_scale(img,pitft.size)         # scale it to screen
+            ax, ay=img.get_size()                         # center the image
+            bx, by=pitft.size
+            if(bx>ax):
+                ix=(bx-ax)/2
+            else:
+                ix=0
+            mytft.screen.blit(img,(ix,0))
             pygame.display.flip() # update the display
             sleep(updateRate/2)
 
