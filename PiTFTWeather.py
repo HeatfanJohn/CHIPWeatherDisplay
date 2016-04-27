@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys
+import sys, getopt
 import os, syslog
 import pygame
 import time
@@ -82,32 +82,18 @@ class pitft :
     def __del__(self):
         "Destructor to make sure pygame shuts down, etc."
 
-# Create an instance of the PyScope class
-mytft = pitft()
-
-pygame.mouse.set_visible(False)
-
-# set up the fonts
-# choose the font
-fontpath = pygame.font.match_font('dejavusansmono')
-# set up 3 sizes
-font = pygame.font.Font(fontpath, 40)
-fontSm = pygame.font.Font(fontpath, 30)
-fontTime = pygame.font.Font(fontpath, 40)
-fontVSm = pygame.font.Font(fontpath, 20)
-
 class MyDisplay:
     """
     aspect_scale.py - Scaling surfaces keeping their aspect ratio
     Raiser, Frank - Sep 6, 2k++
     crashchaos at gmx.net
-    
+
     This is a pretty simple and basic function that is a kind of
     enhancement to pygame.transform.scale. It scales a surface
     (using pygame.transform.scale) but keeps the surface's aspect
     ratio intact. So you will not get distorted images after scaling.
     A pretty basic functionality indeed but also a pretty useful one.
-    
+
     Usage:
     is straightforward.. just create your surface and pass it as
     first parameter. Then pass the width and height of the box to
@@ -115,11 +101,11 @@ class MyDisplay:
     parameter. The aspect_scale method will then return you the scaled
     surface (which does not neccessarily have the size of the specified
     box of course)
-    
+
     Dependency:
     a pygame version supporting pygame.transform (pygame-1.1+)
     """
-    
+
     def aspect_scale(self,img,(bx,by)):
         """ Scales 'img' to fit into box bx/by.
          This method will retain the original image's aspect ratio """
@@ -144,7 +130,7 @@ class MyDisplay:
                 sy = scale_factor * iy
             else:
                 sy = by
-    
+
         return pygame.transform.scale(img, (int(sx),int(sy)))
 
     # implement run method
@@ -276,16 +262,48 @@ class MyDisplay:
             mytft.screen.fill(colourBlack)
             img=pygame.image.load(random.choice(images))  # get a random image
             img=self.aspect_scale(img,pitft.size)         # scale it to screen
-            ax, ay=img.get_size()                         # center the image
+            ax, ay=img.get_size()
             bx, by=pitft.size
-            if(bx>ax):
+            if(bx>ax):                                    # center the image on the x-axis
                 ix=(bx-ax)/2
             else:
                 ix=0
-            mytft.screen.blit(img,(ix,0))
-            pygame.display.flip() # update the display
+            if(by>ay):                                    # center the image on the y-axis
+                iy=(by-ay)/2
+            else:
+                iy=0
+            mytft.screen.blit(img,(ix,iy))
+            pygame.display.flip()                         # update the display
             sleep(updateRate/2)
 
 if __name__ == "__main__":
+    try:
+        opts, args = getopt.getopt(sys.argv[1:],"hi:p:",["installPath=","picturePath="])
+    except getopt.GetoptError:
+        print sys.ar[0] + ' -i <InstallPath> -p <PathToPictures>'
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print 'test.py -i <InstallPath> -p <PathToPictures>'
+            sys.exit()
+        elif opt in ("-i", "--installPath"):
+            installPath = arg
+        elif opt in ("-p", "--picturePath"):
+            picturePath = arg
+
+    # Create an instance of the PyScope class
+    mytft = pitft()
+
+    pygame.mouse.set_visible(False)
+
+    # set up the fonts
+    # choose the font
+    fontpath = pygame.font.match_font('dejavusansmono')
+    # set up 3 sizes
+    font = pygame.font.Font(fontpath, 40)
+    fontSm = pygame.font.Font(fontpath, 30)
+    fontTime = pygame.font.Font(fontpath, 40)
+    fontVSm = pygame.font.Font(fontpath, 20)
+
     myDisplay = MyDisplay()
     myDisplay.run()
