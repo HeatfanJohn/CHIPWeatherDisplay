@@ -94,6 +94,7 @@ fontpath = pygame.font.match_font('dejavusansmono')
 font = pygame.font.Font(fontpath, 40)
 fontSm = pygame.font.Font(fontpath, 30)
 fontTime = pygame.font.Font(fontpath, 40)
+fontVSm = pygame.font.Font(fontpath, 20)
 
 class MyDisplay:
     """
@@ -255,6 +256,9 @@ class MyDisplay:
                 text_surface = fontSm.render(forecastWinds[int(i)], True, colourWhite)
                 mytft.screen.blit(text_surface, (textAnchorX, textAnchorY))
                 textAnchorX+=textXoffset
+
+            text_surface = fontVSm.render('Last updated: ' + weather_com_result['current_conditions']['last_updated'], True, colourWhite)
+            mytft.screen.blit(text_surface, (5, textAnchorY+textYoffset))
 
             # set x axis text anchor for the time
             textAnchorX = 420
