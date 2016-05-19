@@ -283,11 +283,12 @@ if __name__ == "__main__":
     try:
         opts, args = getopt.getopt(sys.argv[1:],"hi:p:",["installPath=","picturePath="])
     except getopt.GetoptError:
-        print sys.ar[0] + ' -i <InstallPath> -p <PathToPictures>'
+        print "Invalid argument(s) specified, command line is:"
+        print sys.argv[0] + " -i <InstallPath> -p <PathToPictures>"
         sys.exit(2)
     for opt, arg in opts:
-        if opt == '-h':
-            print 'test.py -i <InstallPath> -p <PathToPictures>'
+        if opt == "-h":
+            print sys.argv[0] + " -i <InstallPath> -p <PathToPictures>"
             sys.exit()
         elif opt in ("-i", "--installPath"):
             installPath = arg
