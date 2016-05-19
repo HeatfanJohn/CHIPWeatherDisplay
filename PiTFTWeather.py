@@ -140,10 +140,10 @@ class MyDisplay:
             images.append(filename)
 
         while True:
-            weather_com_result = pywapi.get_weather_from_weather_com(weatherDotComLocationCode,units = 'imperial')
 
             # extract current data for today
             try:
+                weather_com_result = pywapi.get_weather_from_weather_com(weatherDotComLocationCode,units = 'imperial')
                 today = weather_com_result['forecasts'][0]['day_of_week'][0:3] + " " \
                     + weather_com_result['forecasts'][0]['date'][4:] + " " \
                     + weather_com_result['forecasts'][0]['date'][:3]
@@ -269,9 +269,12 @@ class MyDisplay:
             else:
                 ix=0
             if(by>ay):                                    # center the image on the y-axis
-                iy=(by-ay)/2
+                iy=(by-ay)/4
             else:
                 iy=0
+
+            print(ax,ay,bx,by,ix,iy)
+
             mytft.screen.blit(img,(ix,iy))
             pygame.display.flip()                         # update the display
             sleep(updateRate/2)
