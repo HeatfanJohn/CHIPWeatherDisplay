@@ -2,9 +2,9 @@
 Description=Chip weather display
 
 [Service]
-#Type=simple
-Type=forking
-ExecStart=/bin/sh -c "/home/chip/CHIPWeatherDisplay/PiTFTWeather.py -i /home/chip/CHIPWeatherDisplay/ -p /home/chip/flickr/photoframe/"
+Type=simple
+#Type=forking
+ExecStart=/bin/sh -c "ulimit -c unlimited; /home/chip/CHIPWeatherDisplay/PiTFTWeather.py -i /home/chip/CHIPWeatherDisplay/ -p /home/chip/flickr/photoframe/"
 Restart=no
 RestartSec=2
 StandardOutput=syslog
