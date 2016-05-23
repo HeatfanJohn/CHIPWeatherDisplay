@@ -1,0 +1,18 @@
+[Unit]
+Description=Chip Status
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python /home/chip/CHIPWeatherApp/PiTFTWeatherapp.py -p /home/chip/flickr/photoframe/
+Restart=always
+RestartSec=2
+StandardOutput=syslog
+SyslogIdentifier=CHIPWeatherApp
+Environment=PATH=/usr/bin:/usr/local/bin:/usr/sbin:/bin
+WorkingDirectory=/home/chip/CHIPWeatherApp
+#
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
