@@ -57,6 +57,7 @@ class pitft :
             # Select frame buffer driver
             driver = 'fbcon'
 
+        print "Using driver: " + driver
         # Make sure that SDL_VIDEODRIVER is set
         if not os.getenv('SDL_VIDEODRIVER'):
             os.putenv('SDL_VIDEODRIVER', driver)
@@ -280,12 +281,16 @@ class MyDisplay:
             sleep(updateRate/2)
 
 if __name__ == "__main__":
+    print sys.argv[0] + " " + str(datetime.now())
+
     try:
         opts, args = getopt.getopt(sys.argv[1:],"hi:p:",["installPath=","picturePath="])
+
     except getopt.GetoptError:
         print "Invalid argument(s) specified, command line is:"
         print sys.argv[0] + " -i <InstallPath> -p <PathToPictures>"
         sys.exit(2)
+
     for opt, arg in opts:
         if opt == "-h":
             print sys.argv[0] + " -i <InstallPath> -p <PathToPictures>"
@@ -294,6 +299,9 @@ if __name__ == "__main__":
             installPath = arg
         elif opt in ("-p", "--picturePath"):
             picturePath = arg
+
+    print "Using Install path = \"" + installPath + "\""
+    print "Using Picture path = \"" + picturePath + "\""
 
     # Create an instance of the PyScope class
     mytft = pitft()

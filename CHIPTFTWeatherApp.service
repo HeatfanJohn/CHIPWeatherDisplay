@@ -1,15 +1,16 @@
 [Unit]
-Description=Chip Status
+Description=Chip weather display
 
 [Service]
-Type=simple
-ExecStart=/usr/bin/python /home/chip/CHIPWeatherApp/PiTFTWeatherapp.py -p /home/chip/flickr/photoframe/
-Restart=always
+#Type=simple
+Type=forking
+ExecStart=/bin/sh -c "/home/chip/CHIPWeatherDisplay/PiTFTWeather.py -i /home/chip/CHIPWeatherDisplay/ -p /home/chip/flickr/photoframe/"
+Restart=no
 RestartSec=2
 StandardOutput=syslog
-SyslogIdentifier=CHIPWeatherApp
+SyslogIdentifier=CHIPWeatherDisplay
 Environment=PATH=/usr/bin:/usr/local/bin:/usr/sbin:/bin
-WorkingDirectory=/home/chip/CHIPWeatherApp
+WorkingDirectory=/home/chip/CHIPWeatherDisplay
 #
 User=root
 Group=root
