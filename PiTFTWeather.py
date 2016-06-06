@@ -318,4 +318,11 @@ if __name__ == "__main__":
     fontVSm = pygame.font.Font(fontpath, 20)
 
     myDisplay = MyDisplay()
-    myDisplay.run()
+
+    try:
+        myDisplay.run()
+
+    finally:
+        print "Executing finally clause ..."
+        pygame.quit()
+        print "pygame.quit() was called"
