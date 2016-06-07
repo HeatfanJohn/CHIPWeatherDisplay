@@ -8,6 +8,7 @@ ExecStart=/bin/sh -c "ulimit -c unlimited; /home/chip/CHIPWeatherDisplay/PiTFTWe
 Restart=no
 RestartSec=2
 StandardOutput=syslog
+StandardError=syslog
 SyslogIdentifier=CHIPWeatherDisplay
 Environment=PATH=/usr/bin:/usr/local/bin:/usr/sbin:/bin
 WorkingDirectory=/home/chip/CHIPWeatherDisplay
