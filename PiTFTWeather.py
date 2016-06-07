@@ -10,6 +10,7 @@ import pywapi
 import string
 import random
 import glob
+import systemd.daemon
 
 #from daemon import Daemon
 
@@ -318,6 +319,7 @@ if __name__ == "__main__":
     fontVSm = pygame.font.Font(fontpath, 20)
 
     myDisplay = MyDisplay()
+    systemd.daemon.notify("READY=1")
 
     try:
         myDisplay.run()
