@@ -1,4 +1,4 @@
-#!/usr/bin/env python -p
+#!/usr/bin/python -u
 
 import sys, getopt
 import os, syslog
