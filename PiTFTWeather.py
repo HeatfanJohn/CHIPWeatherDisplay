@@ -27,6 +27,7 @@ import systemd.daemon
 #installPath = "/opt/CHIPWeatherDisplay/"
 installPath = "./"
 picturePath = "/home/chip/flickr/photoframe/"
+pidFile = "/var/run/CHIPTFTWeatherApp.pid"
 
 # location for Raleigh, NC on weather.com
 weatherDotComLocationCode = '33330:4:US'
@@ -319,6 +320,11 @@ if __name__ == "__main__":
     fontVSm = pygame.font.Font(fontpath, 20)
 
     myDisplay = MyDisplay()
+
+    out = open( pidFile, "w" )
+    print >> out, os.getpid()
+    out.close()
+
     systemd.daemon.notify("READY=1")
 
     try:
