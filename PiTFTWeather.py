@@ -66,6 +66,7 @@ class pitft :
 
         try:
             pygame.display.init()
+            print 'Driver: {0} initialized.'.format(driver)
         except pygame.error:
             print 'Driver: {0} failed.'.format(driver)
             exit(0)
