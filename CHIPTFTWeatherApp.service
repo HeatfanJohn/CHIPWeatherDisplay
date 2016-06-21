@@ -8,6 +8,7 @@ ExecStart=/bin/sh -c "ulimit -c unlimited; /home/chip/CHIPWeatherDisplay/PiTFTWe
 Restart=no
 RestartSec=2
 ExecStop=/bin/sh -c "kill -INT `cat /var/run/CHIPTFTWeatherApp.pid`; sleep 10; echo ExecStop completed!"
+ExecStopPost=/bin/rm -f /var/run/CHIPTFTWeatherApp.pid
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=CHIPWeatherDisplay
