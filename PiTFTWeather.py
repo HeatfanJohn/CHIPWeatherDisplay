@@ -326,7 +326,7 @@ if __name__ == "__main__":
     print >> out, os.getpid()
     out.close()
 
-    systemd.daemon.notify("READY=1")
+#   systemd.daemon.notify("READY=1")
 
     try:
         myDisplay.run()
