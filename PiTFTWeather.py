@@ -331,6 +331,13 @@ if __name__ == "__main__":
     try:
         myDisplay.run()
 
+    except KeyboardInterrupt:
+        print "Shutdown requested ... exiting"
+
+    except Exception:
+        print "Exception occurred ..."
+        traceback.print_exc(file=sys.stdout)
+
     finally:
         print "Executing finally clause ..."
         pygame.quit()
