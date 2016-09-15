@@ -1,6 +1,7 @@
 # CHIPWeatherDisplay
 
 How to use:
+
 1. git clone https://github.com/HeatfanJohn/CHIPWeatherDisplay.git into /home/chip (or /opt)
 2. Install requirements by performing:
   1. `sudo apt-get install python-pygame python-systemd`
