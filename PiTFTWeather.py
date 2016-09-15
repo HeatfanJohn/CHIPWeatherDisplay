@@ -268,9 +268,9 @@ class MyDisplay:
                 # blank out display
                 mytft.screen.fill(colourBlack)
                 img=pygame.image.load(random.choice(images))  # get a random image
-                img=self.aspect_scale(img,pitft.size)         # scale it to screen
+                img=self.aspect_scale(img,mytft.size)         # scale it to screen
                 ax, ay=img.get_size()
-                bx, by=pitft.size
+                bx, by=mytft.size
                 if(bx>ax):                                    # center the image on the x-axis
                     ix=(bx-ax)/2
                 else:
