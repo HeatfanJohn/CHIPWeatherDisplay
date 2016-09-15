@@ -10,7 +10,8 @@ import pywapi
 import string
 import random
 import glob
-import systemd.daemon
+import traceback
+#import systemd.daemon
 
 #from daemon import Daemon
 
@@ -24,13 +25,13 @@ import systemd.daemon
 # *** Not to be used for commercial use without permission!
 # if you want to buy the icons for commercial use please send me a note - http://vclouds.deviantart.com/ ***
 
-#installPath = "/opt/CHIPWeatherDisplay/"
-installPath = "./"
-picturePath = "/home/chip/flickr/photoframe/"
+installPath = "/opt/CHIPWeatherDisplay/"
+picturePath = "none"
 pidFile = "/var/run/CHIPTFTWeatherApp.pid"
+zipCode = "33330"
+weatherDotComFormatCode = ":4:US"
+runAsDaemon = True
 
-# location for Raleigh, NC on weather.com
-weatherDotComLocationCode = '33330:4:US'
 # convert mph = kpd / kphToMph
 kphToMph = 1.60934400061
 
@@ -140,11 +141,11 @@ class MyDisplay:
     # implement run method
     def run(self):
         images = []
-        for filename in glob.glob(picturePath + '*.jpg'):
-            images.append(filename)
+        if( picturePath != "none" ):
+            for filename in glob.glob(picturePath + '*.jpg'):
+                images.append(filename)
 
         while True:
-
             # extract current data for today
             try:
                 weather_com_result = pywapi.get_weather_from_weather_com(weatherDotComLocationCode,units = 'imperial')
@@ -153,6 +154,7 @@ class MyDisplay:
                     + weather_com_result['forecasts'][0]['date'][:3]
             except:
                 print "Unexpected error:", sys.exc_info()[0]
+                traceback.print_exc(file=sys.stdout)
                 print weather_com_result
                 sleep(updateRate/4)
                 continue
@@ -260,44 +262,51 @@ class MyDisplay:
             # refresh the screen with all the changes
             pygame.display.update()
 
-            sleep(updateRate/2)
+            if( picturePath != "none" ):
+                sleep(updateRate/2)
 
-            # blank out display
-            mytft.screen.fill(colourBlack)
-            img=pygame.image.load(random.choice(images))  # get a random image
-            img=self.aspect_scale(img,pitft.size)         # scale it to screen
-            ax, ay=img.get_size()
-            bx, by=pitft.size
-            if(bx>ax):                                    # center the image on the x-axis
-                ix=(bx-ax)/2
+                # blank out display
+                mytft.screen.fill(colourBlack)
+                img=pygame.image.load(random.choice(images))  # get a random image
+                img=self.aspect_scale(img,pitft.size)         # scale it to screen
+                ax, ay=img.get_size()
+                bx, by=pitft.size
+                if(bx>ax):                                    # center the image on the x-axis
+                    ix=(bx-ax)/2
+                else:
+                    ix=0
+                if(by>ay):                                    # center the image on the y-axis
+                    iy=(by-ay)/4
+                else:
+                    iy=0
+
+                print(ax,ay,bx,by,ix,iy)
+
+                mytft.screen.blit(img,(ix,iy))
+                pygame.display.flip()                         # update the display
+                sleep(updateRate/2)
             else:
-                ix=0
-            if(by>ay):                                    # center the image on the y-axis
-                iy=(by-ay)/4
-            else:
-                iy=0
-
-            print(ax,ay,bx,by,ix,iy)
-
-            mytft.screen.blit(img,(ix,iy))
-            pygame.display.flip()                         # update the display
-            sleep(updateRate/2)
+                sleep(updateRate)
 
 if __name__ == "__main__":
     print sys.argv[0] + " " + str(datetime.now())
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hi:p:",["installPath=","picturePath="])
+        opts, args = getopt.getopt(sys.argv[1:],"hi:np:z",["installPath=","picturePath="])
 
     except getopt.GetoptError:
         print "Invalid argument(s) specified, command line is:"
-        print sys.argv[0] + " -i <InstallPath> -p <PathToPictures>"
+        print sys.argv[0] + "-h -n -i <InstallPath> -p <PathToPictures>"
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == "-h":
-            print sys.argv[0] + " -i <InstallPath> -p <PathToPictures>"
+            print sys.argv[0] + " -h -n -i <InstallPath> -p <PathToPictures>"
             sys.exit()
+        elif opt == "-n":
+            runAsDaemon = False
+        elif opt == "-z":
+            zipCode = arg
         elif opt in ("-i", "--installPath"):
             installPath = arg
         elif opt in ("-p", "--picturePath"):
@@ -305,6 +314,10 @@ if __name__ == "__main__":
 
     print "Using Install path = \"" + installPath + "\""
     print "Using Picture path = \"" + picturePath + "\""
+
+    # location for  on weather.com
+    weatherDotComLocationCode = zipCode + weatherDotComFormatCode
+    print "Using Weather.com location code = " + weatherDotComLocationCode
 
     # Create an instance of the PyScope class
     mytft = pitft()
@@ -322,9 +335,10 @@ if __name__ == "__main__":
 
     myDisplay = MyDisplay()
 
-    out = open( pidFile, "w" )
-    print >> out, os.getpid()
-    out.close()
+    if runAsDaemon is True:
+        out = open( pidFile, "w" )
+        print >> out, os.getpid()
+        out.close()
 
 #   systemd.daemon.notify("READY=1")
 
