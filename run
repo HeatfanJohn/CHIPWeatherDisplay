@@ -1,0 +1,4 @@
+#!/bin/sh
+ulimit -c unlimited
+./PiTFTWeather.py -i /home/chip/CHIPWeatherDisplay/ -p /home/chip/flickr/photoframe/ &
+

@@ -1,0 +1,22 @@
+[Unit]
+Description=Chip weather display
+
+[Service]
+Type=simple
+#Type=forking
+ExecStart=/bin/sh -c "ulimit -c unlimited; /home/chip/CHIPWeatherDisplay/PiTFTWeather.py -i /home/chip/CHIPWeatherDisplay/ -p /home/chip/flickr/photoframe/"
+Restart=no
+RestartSec=2
+ExecStop=/bin/sh -c "kill -INT `cat /var/run/CHIPTFTWeatherApp.pid`; sleep 10; echo ExecStop completed!"
+ExecStopPost=/bin/rm -f /var/run/CHIPTFTWeatherApp.pid
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=CHIPWeatherDisplay
+Environment=PATH=/usr/bin:/usr/local/bin:/usr/sbin:/bin
+WorkingDirectory=/home/chip/CHIPWeatherDisplay
+#
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
