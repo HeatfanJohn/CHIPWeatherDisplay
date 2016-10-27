@@ -31,6 +31,7 @@ pidFile = "/var/run/CHIPTFTWeatherApp.pid"
 zipCode = "33330"
 weatherDotComFormatCode = ":4:US"
 runAsDaemon = True
+vgaResolution = False
 
 # convert mph = kpd / kphToMph
 kphToMph = 1.60934400061
@@ -72,7 +73,7 @@ class pitft :
             print 'Driver: {0} failed.'.format(driver)
             exit(0)
 
-        if disp_no:
+        if disp_no or vgaResolution:
             self.screen = pygame.display.set_mode(self.size)
         else:
             self.size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
@@ -311,6 +312,8 @@ if __name__ == "__main__":
             installPath = arg
         elif opt in ("-p", "--picturePath"):
             picturePath = arg
+        elif opt in ("-v", "--vga"):
+            vgaResolution = True
 
     print "Using Install path = \"" + installPath + "\""
     print "Using Picture path = \"" + picturePath + "\""
