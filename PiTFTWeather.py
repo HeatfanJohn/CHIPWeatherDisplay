@@ -44,12 +44,13 @@ colourBlack = (0, 0, 0)
 updateRate = 60 # seconds
 
 class pitft :
-    screen = None;
-    colourBlack = (0, 0, 0)
-    size = (640,480)
 
     def __init__(self):
         "Ininitializes a new pygame screen using the framebuffer"
+
+        screen = None;
+        size = (640,480)
+
         # Based on "Python GUI in Linux frame buffer"
         # http://www.karoltomala.com/blog/?p=679
         disp_no = os.getenv("DISPLAY")
