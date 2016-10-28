@@ -73,11 +73,13 @@ class pitft :
             print 'Driver: {0} failed.'.format(driver)
             exit(0)
 
-        if disp_no or vgaResolution:
+        if disp_no:
             self.screen = pygame.display.set_mode(self.size)
         else:
-            self.size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+            if not vgaResolution:
+                self.size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
             self.screen = pygame.display.set_mode(self.size, pygame.FULLSCREEN)
+
         # Clear the screen to start
         self.screen.fill((0, 0, 0))
         # Initialise font support
@@ -293,11 +295,11 @@ if __name__ == "__main__":
     print sys.argv[0] + " " + str(datetime.now())
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hi:np:z",["installPath=","picturePath="])
+        opts, args = getopt.getopt(sys.argv[1:],"hi:np:vz:",["vga","installPath=","picturePath="])
 
     except getopt.GetoptError:
         print "Invalid argument(s) specified, command line is:"
-        print sys.argv[0] + "-h -n -i <InstallPath> -p <PathToPictures>"
+        print sys.argv[0] + " -h -n -i <InstallPath> -p <PathToPictures>"
         sys.exit(2)
 
     for opt, arg in opts:
