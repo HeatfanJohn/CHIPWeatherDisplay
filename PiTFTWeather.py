@@ -72,6 +72,7 @@ class pitft :
             print 'Driver: {0} initialized.'.format(driver)
         except pygame.error:
             print 'Driver: {0} failed.'.format(driver)
+            print sys.exc_info()
             exit(0)
 
         if disp_no:
