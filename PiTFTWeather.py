@@ -2,6 +2,7 @@
 
 import sys, getopt
 import os, syslog
+import socket
 import pygame
 import time
 from time import sleep, strftime
@@ -42,6 +43,9 @@ colourBlack = (0, 0, 0)
 
 # update interval
 updateRate = 60 # seconds
+
+# set a timeout of 30 seconds in `socket` which will eventually be used by `urllib2`
+socket.setdefaulttimeout(30.0)
 
 class pitft :
 
