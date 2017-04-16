@@ -206,7 +206,10 @@ class MyDisplay:
             mytft.screen.fill(colourBlack)
 
             # Render the weather logo at 0,0
-            icon = installPath + "icons/" + (weather_com_result['current_conditions']['icon']) + ".png"
+            if( weather_com_result['current_conditions']['icon'] != "" ):
+                icon = installPath + "icons/" + (weather_com_result['current_conditions']['icon']) + ".png"
+            else:
+                icon = installPath + "icons/na.png"
             logo = pygame.image.load(icon).convert()
             mytft.screen.blit(logo, (0, 0))
 
